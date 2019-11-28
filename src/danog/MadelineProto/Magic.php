@@ -94,7 +94,7 @@ class Magic
             self::$has_thread = \class_exists('\\Thread') && \method_exists('\\Thread', 'getCurrentThread');
             self::$BIG_ENDIAN = \pack('L', 1) === \pack('N', 1);
             self::$bigint = PHP_INT_SIZE < 8;
-            self::$ipv6 = (bool) \strlen(@\file_get_contents('http://v6.ipv6-test.com/api/myip.php', false, \stream_context_create(['http' => ['timeout' => 1]]))) > 0;
+            self::$ipv6 = false;
             \preg_match('/const V = (\\d+);/', @\file_get_contents('https://raw.githubusercontent.com/danog/MadelineProto/master/src/danog/MadelineProto/MTProto.php'), $matches);
             if (isset($matches[1]) && \danog\MadelineProto\MTProto::V < (int) $matches[1]) {
                 throw new \danog\MadelineProto\Exception(\hex2bin(\danog\MadelineProto\Lang::$current_lang['v_error']), 0, null, 'MadelineProto', 1);
@@ -125,7 +125,7 @@ class Magic
             self::$can_getmypid = !self::$altervista && !self::$zerowebhost;
 			$revisionFilename = __DIR__ . '/../../../.git/refs/heads/master';
             if (file_exists($revisionFilename)) {
-                self::$revision = file_get_contents($revisionFilename);
+                self::$revision = @\file_get_contents($revisionFilename);
             }
             if (self::$revision) {
                 self::$revision = \trim(self::$revision);
